@@ -13,9 +13,9 @@ class BankFactory
     /**
      * @throws Exception
      */
-    public static function create(string $acquirerName) : BankInterface
+    public static function create(string $bankName) : BankInterface
     {
-        switch ($acquirerName) {
+        switch ($bankName) {
             case BanksNames::SBERBANK:
                 return new Sberbank();
             case BanksNames::TINKOFF:

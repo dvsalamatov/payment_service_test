@@ -2,39 +2,25 @@
 
 declare(strict_types=1);
 
-use App\Banks\Enum\BanksNames;
-use App\PaymentMethods\Enum\PaymentNameEnum;
-use App\Services\Payments\ChargePaymentService;
-use App\Services\Payments\CreatePaymentService;
-use App\Services\Processing\ProcessingService;
-use App\Strategy\Context;
-use App\Strategy\StrategyFactory;
+use App\Forms\ClientPaymentForm;
+use App\Services\PaymentService;
 
 require_once './vendor/autoload.php';
 
-$clientBankName = BanksNames::SBERBANK;
-$clientAmount = 100;
-$clientCurrency = 'EUR';
+/**
+ * app.php - это некая ручка "POST /do-payment"
+ *
+ * С клиента приходит некоторая форма с детализацией платежа: имя flow (card/qiwi/etc), имя банка,
+ * детали операции и детали платежного инструмента
+ */
+//Клиентская форма для Qiwi
+$form = ClientPaymentForm::createQiwiForm();
 
-//Example for Qiwi
-$clientPaymentFlow = PaymentNameEnum::QIWI;
-$params = ['phone' => '+79059808010'];
-$context = new Context($clientAmount, $clientCurrency, $clientBankName, $clientPaymentFlow, $params);
-$strategyFactory = new StrategyFactory(new CreatePaymentService(), new ChargePaymentService());
-$processingService = new ProcessingService($strategyFactory);
-$response = $processingService->handle($context);
+//Либо клиентская форма для карты
+//$form = ClientPaymentForm::createCardForm();
 
-//Example for Card
-//$clientPaymentFlow = PaymentNameEnum::CARD;
-//$params = [
-//    'pan' => '4242424242424242',
-//    'date' => new \DateTime('2021-10-15'),
-//    'cvc' => 123
-//];
-//$context = new Context($clientAmount, $clientCurrency, $clientBankName, $clientPaymentFlow, $params);
-//$strategyFactory = new StrategyFactory(new CreatePaymentService(), new ChargePaymentService());
-//$processingService = new ProcessingService($strategyFactory);
-//$response = $processingService->handle($context);
+$paymentService = new PaymentService();
+$response = $paymentService->processPayment($form);
 
 if ($response->isCompleted()) {
     echo 'Thank you! Payment completed';

@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Strategy\Contracts;
 
+use App\Banks\Contracts\BankInterface;
 use App\Banks\Responses\ProcessedPayment;
-use App\Strategy\Context;
+use Money\Money;
 
 interface StrategyInterface
 {
-    public function setContext(Context $context) : void;
+    public function instancePaymentMethod(array $params) : void;
 
-    public function createBank() : void;
+    public function setBank(BankInterface $bank) : void;
 
-    public function createPaymentMethod() : void;
-
-    public function createPayment() : void;
+    public function createPayment(Money $amount, Money $commission) : void;
 
     public function processPayment() : ProcessedPayment;
 }

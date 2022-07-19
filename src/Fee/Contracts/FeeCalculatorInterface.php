@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Fee;
+namespace App\Fee\Contracts;
 
 use Money\Money;
 
