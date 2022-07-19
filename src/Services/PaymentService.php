@@ -16,14 +16,12 @@ class PaymentService implements PaymentServiceInterface
     public function processPayment(ClientPaymentForm $form) : ProcessedPayment
     {
         $bank = BankFactory::create($form->getBankName());
+        $feeCalculator = new FeeCalculator($form->getAmount());
+        $feeCalculator->setFlowName($form->getFlowName());
 
         $strategy = StrategyFactory::create($form->getFlowName());
         $strategy->instancePaymentMethod($form->getParams());
         $strategy->setBank($bank);
-
-        $feeCalculator = new FeeCalculator($form->getAmount());
-        $feeCalculator->setFlowName($form->getFlowName());
-
         $strategy->createPayment($form->getAmount(), $feeCalculator->calculateCommission());
 
         return $strategy->processPayment();
