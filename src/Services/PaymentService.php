@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -12,7 +13,7 @@ use App\Strategy\StrategyFactory;
 
 class PaymentService implements PaymentServiceInterface
 {
-    public function processPayment(ClientPaymentForm $form): ProcessedPayment
+    public function processPayment(ClientPaymentForm $form) : ProcessedPayment
     {
         $bank = BankFactory::create($form->getBankName());
 

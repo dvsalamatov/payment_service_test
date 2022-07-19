@@ -13,7 +13,6 @@ require_once './vendor/autoload.php';
  * С клиента приходит некоторая форма с детализацией платежа: имя flow (card/qiwi/etc), имя банка,
  * детали операции и детали платежного инструмента
  */
-
 //Клиентская форма для Qiwi
 $form = ClientPaymentForm::createQiwiForm();
 
@@ -22,7 +21,6 @@ $form = ClientPaymentForm::createQiwiForm();
 
 $paymentService = new PaymentService();
 $response = $paymentService->processPayment($form);
-
 
 if ($response->isCompleted()) {
     echo 'Thank you! Payment completed';
