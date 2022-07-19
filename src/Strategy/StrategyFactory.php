@@ -10,6 +10,9 @@ use Exception;
 
 class StrategyFactory
 {
+    /**
+     * @throws Exception
+     */
     public static function create(string $paymentFlowName) : StrategyInterface
     {
         switch ($paymentFlowName) {

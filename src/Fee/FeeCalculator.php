@@ -17,7 +17,7 @@ class FeeCalculator implements FeeCalculatorInterface
         $this->amount = $amount;
     }
 
-    public function setFlowName(string $flowName): void
+    public function setFlowName(string $flowName) : void
     {
         $this->flowName = $flowName;
     }
