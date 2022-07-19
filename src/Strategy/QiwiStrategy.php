@@ -1,38 +1,26 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Strategy;
 
+use App\Banks\Contracts\BankInterface;
 use App\Banks\Responses\ProcessedPayment;
-use App\PaymentMethods\CardFactory;
+use App\Entities\Payment;
 use App\PaymentMethods\Qiwi;
-use App\Payments\Contracts\QiwiPaymentInterface;
-use App\Services\Payments\Commands\CreatePaymentCommand;
-use App\Strategy\Contracts\CardStrategyInterface;
+use App\Strategy\Contracts\StrategyInterface;
+use Money\Money;
 
-class QiwiStrategy extends AbstractStrategy implements CardStrategyInterface
+class QiwiStrategy extends AbstractStrategy
 {
     protected Qiwi $qiwi;
-    protected QiwiPaymentInterface $payment;
 
-    public function createPaymentMethod() : void
+    public function instancePaymentMethod(array $params): void
     {
-        $this->qiwi = CardFactory::createQiwi($this->context->getPaymentMethodParams());
+        $this->qiwi = new Qiwi($params['phone']);
     }
 
-    public function createPayment() : void
+    public function processPayment(): ProcessedPayment
     {
-        $this->createFeeCalculator();
-
-        $this->payment = $this->createPaymentService->handleQiwi(
-            new CreatePaymentCommand($this->context->getAmount(), $this->feeCalculator),
-            $this->qiwi
-        );
-    }
-
-    public function processPayment() : ProcessedPayment
-    {
-        return $this->chargePaymentService->handleQiwiPayment($this->payment, $this->bank);
+        return $this->bank->processQiwiPayment($this->payment->getAmount(), $this->qiwi);
     }
 }

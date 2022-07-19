@@ -6,7 +6,7 @@ namespace App\PaymentMethods;
 
 use App\PaymentMethods\Enum\PaymentNameEnum;
 
-class Qiwi extends AbstractPaymentMethod
+class Qiwi
 {
     private string $phone;
 

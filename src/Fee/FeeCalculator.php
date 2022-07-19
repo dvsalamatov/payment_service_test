@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace App\Fee;
 
+use App\Fee\Contracts\FeeCalculatorInterface;
 use Money\Money;
 
-class FeeCalculatorCalculator implements FeeCalculatorInterface
+class FeeCalculator implements FeeCalculatorInterface
 {
     protected Money $amount;
-    protected string $paymentMethod;
+    protected string $flowName;
 
-    public function __construct(Money $amount, string $paymentMethod)
+    public function __construct(Money $amount)
     {
         $this->amount = $amount;
-        $this->paymentMethod = $paymentMethod;
+    }
+
+    public function setFlowName(string $flowName): void
+    {
+        $this->flowName = $flowName;
     }
 
     /**
